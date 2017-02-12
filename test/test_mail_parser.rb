@@ -1,5 +1,7 @@
 gem 'minitest', '~> 5.4'
 require 'minitest/autorun'
+require 'minitest/reporters'
+Minitest::Reporters.use!
 
 require_relative '../lib/mail_parser'
 
