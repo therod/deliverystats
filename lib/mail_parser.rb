@@ -1,67 +1,47 @@
 require 'mail'
-require 'cgi'
 
 class MailParser
   def self.parse(email)
-    data = MailData.new(email)
-    {
-      date:        data.date,
-      time_window: data.time_window,
-      customer:    data.customer,
-      street:      data.street,
-      zip:         data.zip,
-      total:       data.total
-    }
+    text = Mail.read(email).parts.first.body.raw_source
+    data = MailData.new(text)
+    data.to_h
   end
 end
 
 class MailData
-  attr_accessor :attributes, :clean_array
+  attr_accessor :data
+  attr_reader :date, :time_window, :customer, :street, :zip, :total
 
-  def initialize(email)
-    @clean_array = clean(email)
+  def initialize(text)
+    @data        = clean(text)
+    @date        = data[customer_index - 1].split(' ')[1]
+    @time_window = data[customer_index - 1].split(' ')[2]
+    @customer    = data[customer_index + 1]
+    @street      = data[customer_index + 3]
+    @zip         = data[customer_index + 4]
+    @total       = data[total_index + 1]
   end
 
-  def date
-    clean_array[customer_index - 1].split(' ')[1]
-  end
-
-  def time_window
-    clean_array[customer_index - 1].split(' ')[2]
-  end
-
-  def customer
-    clean_array[customer_index + 1]
-  end
-
-  def street
-    clean_array[customer_index + 3]
-  end
-
-  def zip
-    clean_array[customer_index + 4]
-  end
-
-  def total
-    clean_array[total_index + 1]
+  def to_h
+    { date: date, time_window: time_window, customer: customer,
+      street: street, zip: zip, total: total }
   end
 
   private
 
   def customer_index
-    clean_array.index { |s| s.include?('Kundeninformation') }
+    data.index { |s| s.include?('Kundeninformation') }
   end
 
   def total_index
-    clean_array.index { |s| s.include?('Total in CHF') }
+    data.index { |s| s.include?('Total in CHF') }
   end
 
-  def clean(email)
+  def clean(text)
     replacements = { '> ' => '', "\r" => '', '=' => '%' }
 
-    mail_text = Mail.read(email).parts.first.body.raw_source
-    mail_text.split("\n").map do |s|
-      CGI.unescape(s.gsub(Regexp.union(replacements.keys), replacements)).strip
+    text.split("\n").map do |string|
+      CGI.unescape(string.gsub(Regexp.union(replacements.keys), replacements)).strip
     end
   end
 end
