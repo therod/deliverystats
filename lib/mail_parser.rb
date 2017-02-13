@@ -34,7 +34,7 @@ class MailData
   private
 
   def index(string)
-    data.index { |line| line.include?(string) }
+    data.index(string)
   end
 
   def clean(text)
