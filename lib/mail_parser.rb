@@ -16,14 +16,14 @@ class MailData
   end
 
   def set_attributes
-    customer_index = index('Kundeninformation')
-    total_index = index('Total in CHF')
+    customer_index = data.index('Kundeninformation')
+    total_index = data.index('Total in CHF')
 
-    _, @date, @time_window    = data.at(customer_index - 1).split(' ')
-    @customer                 = data.at(customer_index + 1)
-    @street                   = data.at(customer_index + 3)
-    @zip                      = data.at(customer_index + 4)
-    @total                    = data.at(total_index + 1)
+    _, @date, @time_window = data.at(customer_index - 1).split(' ')
+    @customer              = data.at(customer_index + 1)
+    @street                = data.at(customer_index + 3)
+    @zip                   = data.at(customer_index + 4)
+    @total                 = data.at(total_index + 1)
   end
 
   def to_h
@@ -32,10 +32,6 @@ class MailData
   end
 
   private
-
-  def index(string)
-    data.index(string)
-  end
 
   def clean(text)
     replacements = { '> ' => '', "\r" => '', '=' => '%' }
