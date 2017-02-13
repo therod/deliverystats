@@ -15,6 +15,13 @@ class MailData
     set_attributes
   end
 
+  def to_h
+    { date: date, time_window: time_window, customer: customer,
+      street: street, zip: zip, total: total }
+  end
+
+  private
+
   def set_attributes
     customer_index = data.index('Kundeninformation')
     total_index = data.index('Total in CHF')
@@ -25,13 +32,6 @@ class MailData
     @zip                   = data.at(customer_index + 4)
     @total                 = data.at(total_index + 1)
   end
-
-  def to_h
-    { date: date, time_window: time_window, customer: customer,
-      street: street, zip: zip, total: total }
-  end
-
-  private
 
   def clean(string)
     replacements = { '> ' => '', "\r" => '', '=' => '%' }
