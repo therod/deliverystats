@@ -12,14 +12,13 @@ class MailData
   attr_reader :data, :date, :time_window, :customer, :street, :zip, :total
 
   def initialize(text)
-    @data        = clean(text)
+    @data = clean(text)
 
-    @date        = data.at(customer_index - 1).split(' ')[1]
-    @time_window = data.at(customer_index - 1).split(' ')[2]
-    @customer    = data.at(customer_index + 1)
-    @street      = data.at(customer_index + 3)
-    @zip         = data.at(customer_index + 4)
-    @total       = data.at(total_index + 1)
+    _, @date, @time_window    = data.at(customer_index - 1).split(' ')
+    @customer                 = data.at(customer_index + 1)
+    @street                   = data.at(customer_index + 3)
+    @zip                      = data.at(customer_index + 4)
+    @total                    = data.at(total_index + 1)
   end
 
   def to_h
