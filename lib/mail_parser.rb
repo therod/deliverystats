@@ -3,8 +3,7 @@ require 'mail'
 class MailParser
   def self.parse(email)
     text = Mail.read(email).parts.first.raw_source
-    data = MailData.new(text)
-    data.to_h
+    MailData.new(text).to_h
   end
 end
 
