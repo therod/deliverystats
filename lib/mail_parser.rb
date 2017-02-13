@@ -10,8 +10,8 @@ end
 class MailData
   attr_reader :data, :date, :time_window, :customer, :street, :zip, :total
 
-  def initialize(text)
-    @data = clean(text)
+  def initialize(body)
+    @data = clean(body).split("\n").map(&:strip)
     set_attributes
   end
 
@@ -33,12 +33,8 @@ class MailData
 
   private
 
-  def clean(text)
+  def clean(string)
     replacements = { '> ' => '', "\r" => '', '=' => '%' }
-
-    text.split("\n").map do |string|
-      CGI.unescape(string.gsub(Regexp.union(replacements.keys), replacements))
-         .strip
-    end
+    CGI.unescape(string.gsub(Regexp.union(replacements.keys), replacements))
   end
 end
