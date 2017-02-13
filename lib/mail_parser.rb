@@ -12,18 +12,14 @@ class MailData
   attr_reader :data, :date, :time_window, :customer, :street, :zip, :total
 
   def initialize(text)
-
-    customer_info = 'Kundeninformation'
-    total_info    = 'Total in CHF'
-
     @data        = clean(text)
 
-    @date        = data[index(customer_info) - 1].split(' ')[1]
-    @time_window = data[index(customer_info) - 1].split(' ')[2]
-    @customer    = data[index(customer_info) + 1]
-    @street      = data[index(customer_info) + 3]
-    @zip         = data[index(customer_info) + 4]
-    @total       = data[index(total_info) + 1]
+    @date        = data.at(customer_index - 1).split(' ')[1]
+    @time_window = data.at(customer_index - 1).split(' ')[2]
+    @customer    = data.at(customer_index + 1)
+    @street      = data.at(customer_index + 3)
+    @zip         = data.at(customer_index + 4)
+    @total       = data.at(total_index + 1)
   end
 
   def to_h
@@ -32,6 +28,14 @@ class MailData
   end
 
   private
+
+  def customer_index
+    index('Kundeninformation')
+  end
+
+  def total_index
+    index('Total in CHF')
+  end
 
   def index(string)
     data.index { |line| line.include?(string) }
