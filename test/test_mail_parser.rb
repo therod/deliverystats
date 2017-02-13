@@ -14,6 +14,6 @@ class MailParserTest < Minitest::Test
                         zip: '8002',
                         total: '53,00' }
 
-    assert_equal expected_result, MailParser.parse_email('test/email.eml')
+    assert_equal expected_result, MailParser.parse('test/email.eml')
   end
 end
