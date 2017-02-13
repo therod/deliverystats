@@ -9,8 +9,7 @@ class MailParser
 end
 
 class MailData
-  attr_accessor :data
-  attr_reader :date, :time_window, :customer, :street, :zip, :total
+  attr_reader :data, :date, :time_window, :customer, :street, :zip, :total
 
   def initialize(text)
 
