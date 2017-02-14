@@ -23,13 +23,14 @@ class MailData
   private
 
   def set_attributes
-    customer_index = data.index('Kundeninformation')
+    datetime_index = data.index('Kundeninformation') || data.index('Customer information')
+    zip_index = data.index{ |index| index.match(/^[8]\d{3}{1,4}$/) }
     total_index = data.index('Total in CHF')
 
-    _, @date, @time_window = data.at(customer_index - 1).split(' ')
-    @customer              = data.at(customer_index + 1)
-    @street                = data.at(customer_index + 3)
-    @zip                   = data.at(customer_index + 4)
+    _, @date, @time_window = data.at(datetime_index - 1).split(' ')
+    @customer              = data.at(zip_index - 3)
+    @street                = data.at(zip_index - 1)
+    @zip                   = data.at(zip_index)
     @total                 = data.at(total_index + 1)
   end
 
