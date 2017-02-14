@@ -28,4 +28,15 @@ class MailParserTest < Minitest::Test
     assert_equal expected_result, MailParser.parse('test/fixtures/email_2.eml')
   end
 
+  def test_email_3
+    expected_result = { date: '12.02.17',
+                        time_window: '20:00-20:30',
+                        customer: 'SERGIO GARCIA',
+                        street: 'DUFOURSTRASSE 81',
+                        zip: '8008',
+                        total: '49.60' }
+
+    assert_equal expected_result, MailParser.parse('test/fixtures/email_3.eml')
+  end
+
 end
