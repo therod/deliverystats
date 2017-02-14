@@ -12,9 +12,10 @@ class MailData
 
   def initialize(body)
     data = clean(body).split("\n").map(&:strip)
-    time_index = data.index('Kundeninformation') || data.index('Customer information')
-    customer_index = data.index { |i| i.match(/^[8]\d{3}{1,4}$/) }
-    price_index = data.index('Total in CHF')
+
+    time_index     = data.index('Kundeninformation') || data.index('Customer information')
+    customer_index = data.index { |line| line.match(/^[8]\d{3}{1,4}$/) }
+    price_index    = data.index('Total in CHF')
 
     @customer              = data.at(customer_index - 3)
     @street                = data.at(customer_index - 1)
