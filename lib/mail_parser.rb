@@ -13,13 +13,17 @@ class MailData
   def initialize(body)
     data = clean(body).split("\n").map(&:strip)
 
+    # TODO: use data.index {|x| x == ("Kunden" || "Customer")}
+    # @date = data.map{|x| x =~ /\d\d[.]\d\d[.]\d\d/ }
+    # @time_window = data
+
     time_index     = data.index('Kundeninformation') || data.index('Customer information')
-    customer_index = data.index { |line| line.match(/^[8]\d{3}{1,4}$/) }
+    customer_index = data.index('Bemerkungen') || data.index('Notes')
     price_index    = data.index('Total in CHF')
 
-    @customer              = data.at(customer_index - 3)
-    @street                = data.at(customer_index - 1)
-    @zip                   = data.at(customer_index)
+    @customer              = data.at(customer_index - 4)
+    @street                = data.at(customer_index - 2)
+    @zip                   = data.at(customer_index - 1)
     @total                 = data.at(price_index + 1)
     _, @date, @time_window = data.at(time_index - 1).split(' ')
   end
