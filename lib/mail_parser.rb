@@ -8,14 +8,11 @@ class MailParser
 end
 
 class MailData
-  attr_reader :date, :time_window, :total, :customer, :street, :zip
+  attr_reader :date, :total, :customer, :street, :zip, :time_start, :time_end
+
 
   def initialize(body)
     data = clean(body).split("\n").map(&:strip)
-
-    # TODO: use data.index {|x| x == ("Kunden" || "Customer")}
-    # @date = data.map{|x| x =~ /\d\d[.]\d\d[.]\d\d/ }
-    # @time_window = data
 
     time_index     = data.index('Kundeninformation') || data.index('Customer information')
     customer_index = data.index('Bemerkungen') || data.index('Notes')
@@ -25,11 +22,12 @@ class MailData
     @street                = data.at(customer_index - 2)
     @zip                   = data.at(customer_index - 1)
     @total                 = data.at(price_index + 1)
-    _, @date, @time_window = data.at(time_index - 1).split(' ')
+    _, @date, time_window  = data.at(time_index - 1).split(' ')
+    @time_start, @time_end = time_window.split('-')
   end
 
   def to_h
-    { date: date, time_window: time_window, customer: customer,
+    { date: date, time_start: time_start, time_end: time_end, customer: customer,
       street: street, zip: zip, total: total }
   end
 
