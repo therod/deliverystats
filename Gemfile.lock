@@ -82,6 +82,7 @@ DEPENDENCIES
   mail
   minitest (~> 5.4)
   minitest-reporters
+  pry
   rake
   sqlite3
 
