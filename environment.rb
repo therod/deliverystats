@@ -1,10 +1,12 @@
 require 'active_record'
-# environment.rb
+
 # recursively requires all files in ./lib and down that end in .rb
-Dir.glob('./lib/*').each do |folder|
-  Dir.glob(folder +"/*.rb").each do |file|
-    require file
-  end
+Dir.glob("./lib/*.rb").each do |file|
+  require file
+end
+
+Dir.glob("./db/migrations/*.rb").each do |file|
+  require file
 end
 
 # tells AR what db file to use
